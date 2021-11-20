@@ -6,16 +6,30 @@ void PrintStack(){
     printw("\n");
     
     for (r=24;r>-1;r--){
-    
-        for (rt=0;rt<10;rt++){printw("%d ",board [rt][r]);}
+    	printw("|");
+        for (rt=0;rt<10;rt++){
+        	
+        	switch(board[rt][r]){
+        	
+        		case 1:
+        			printw("O ");
+        			break;
+        		case 0:
+        			printw(". ");
+        			break;
+        		default:
+        			printw("x ");
+        	}
+        	//printw("%d ",board[rt][r]);
+        }
         
-        printw("\n");
+        printw("|\n");
     }
 }
 
 void PrintActive(){
 	
-	for(r=0;r<4;r++){board[piecex[r]][piecey[r]]=1;}
+	for(r=0;r<4;r++){board[piecex[r]][piecey[r]]=2;}
 }
 
 void RemoveActive(){

@@ -71,7 +71,7 @@ void LineClear(){
 	
 		for(rt=0;rt<10;rt++){
 		
-			if(board[rt][clearlines[r]]!=2){break;}
+			if(board[rt][clearlines[r]]!=1){break;}
 		}
 		
 		if(rt==10){
@@ -132,7 +132,7 @@ void SpawnPiece(){
 
 	for(r=0;r<4;r++){
 		
-		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]==2){death++;}
+		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]==1){death++;}
 		
 		piecex[r]=spawnlocx[activepiece][r];
 		piecey[r]=spawnlocy[activepiece][r];
@@ -148,7 +148,7 @@ void MovePiece(){
 	
 		if(piecex[r]+direction==-1 || piecex[r]+direction==10){return;}
 		
-		if(board[piecex[r]+direction][piecey[r]]==2){return;}
+		if(board[piecex[r]+direction][piecey[r]]==1){return;}
 	}
 		
 		for(r=0;r<4;r++){piecex[r]=piecex[r]+direction;}
@@ -240,7 +240,7 @@ void RotatePiece(){
 					0>(tempx[rt]+tempkickix[r]) || 
 					(24<(tempy[rt]+tempkickiy[r]) ||
 					0>(tempy[rt]+tempkickiy[r])) ||
-					(board[tempx[rt]+tempkickix[r]][tempy[rt]+tempkickiy[r]]==2))
+					(board[tempx[rt]+tempkickix[r]][tempy[rt]+tempkickiy[r]]==1))
 				{break;}
 			}
 			
@@ -286,7 +286,7 @@ void RotatePiece(){
 				0>(tempx[rt]+tempkickx) || 
 				24<(tempy[rt]+tempkicky) || 
 				0>(tempy[rt])+tempkicky || 
-				(board[tempx[rt]+tempkickx][tempy[rt]+tempkicky]==2))
+				(board[tempx[rt]+tempkickx][tempy[rt]+tempkicky]==1))
 				{
 				
 					break;
@@ -335,11 +335,11 @@ void HardDrop(){
 	
 		for(rt=0;rt<4;rt++){
 			
-			if(piecey[rt]-r==-1 || board[piecex[rt]][piecey[rt]-r]==2){
+			if(piecey[rt]-r==-1 || board[piecex[rt]][piecey[rt]-r]==1){
 			
 				for(rt=0;rt<4;rt++){
 				
-					board[piecex[rt]][piecey[rt]-r+1]=2;
+					board[piecex[rt]][piecey[rt]-r+1]=1;
 					
 					//makes a list of y values to check for line clears on
 					clearlines[rt]=piecey[rt]-r+1;
@@ -358,7 +358,7 @@ void SoftDrop(){
 
 	for(r=0;r<4;r++){
 	
-		if(board[piecex[r]][piecey[r]-1]==2 || (piecey[r]-1)<0){break;}
+		if(board[piecex[r]][piecey[r]-1]==1 || (piecey[r]-1)<0){break;}
 	}
 	
 	if(r==4){
