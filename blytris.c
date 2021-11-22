@@ -12,7 +12,6 @@ const int ikickx[5]={0,-2,1,-2,1};
 const int ikickx2[5]={0,-1,2,-1,2};
 const int ikicky[5]={0,0,0,-1,2};
 const int ikicky2[5]={0,0,0,-2,1};
-const char piecechars[8]={"ijlostz"};
 int board[10][25];
 int death=0;
 int queue[14];
@@ -416,7 +415,6 @@ void main(){
 		if(input=='q'){death++; }
 		
 		PrintActive();
-		PrintQueueAndHold();		
 		PrintStack();
 		refresh();
 	}
