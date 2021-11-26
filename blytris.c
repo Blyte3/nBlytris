@@ -35,13 +35,14 @@ int clearlines[4];
 int ycleared[4];
 int direction;
 int rotdir;
-int r,rt,rth;
 
 #include"graphics.h"
 
 //builds the matrix, fills it with zeroes
 void BuildStack(){
-
+	
+	int r,rt;
+	
 	for (r=0;r<10;r++){
 	
         for (rt=0;rt<25;rt++){board[r][rt]=0;}
@@ -51,9 +52,9 @@ void BuildStack(){
 //generates a randomized bag and puts it in bag[]
 void GenBag(){
 
-	for(r=0;r<7;r++){
-		randpieces[r]=r;
-	}
+	int r;
+
+	for(r=0;r<7;r++){randpieces[r]=r;}
 	
 	for(r=7;r>0;r--){
 		
@@ -65,6 +66,8 @@ void GenBag(){
 
 //checks for line clears and clears if neccesary
 void LineClear(){
+		
+	int r,rt,rth;
 		
 	for(r=0;r<4;r++){
 	
@@ -95,6 +98,8 @@ void LineClear(){
 //moves the queue forward and generates more queue if needed
 void MoveQueue(){
 
+	int r;
+
 	queueaccesspoint++;
 	
 	if (queueaccesspoint==7){
@@ -113,6 +118,8 @@ void MoveQueue(){
 //creates an initial queue
 void InitialQueue(){
 
+	int r;
+
 	queueaccesspoint=0;
 	
 	GenBag();
@@ -129,6 +136,8 @@ void InitialQueue(){
 //spawns in the next piece in the queue
 void SpawnPiece(){
 
+	int r;
+
 	for(r=0;r<4;r++){
 		
 		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]==1){death++;}
@@ -143,6 +152,8 @@ void SpawnPiece(){
 //moves the piece side to side
 void MovePiece(){
 	
+	int r;
+	
 	for(r=0;r<4;r++){
 	
 		if(piecex[r]+direction==-1 || piecex[r]+direction==10){return;}
@@ -150,11 +161,13 @@ void MovePiece(){
 		if(board[piecex[r]+direction][piecey[r]]==1){return;}
 	}
 		
-		for(r=0;r<4;r++){piecex[r]=piecex[r]+direction;}
+	for(r=0;r<4;r++){piecex[r]=piecex[r]+direction;}
 }
 
 //rotates the piece with SRS
 void RotatePiece(){
+
+	int r,rt;
 	
 	rotnum-=rotdir;
 	
@@ -329,6 +342,8 @@ void HoldPiece(){
 
 //drops the piece down
 void HardDrop(){
+
+	int r,rt;
 	
 	for(r=0;;r++){
 	
@@ -355,15 +370,14 @@ void HardDrop(){
 //moves the piece downwards
 void SoftDrop(){
 
+	int r;
+
 	for(r=0;r<4;r++){
 	
-		if(board[piecex[r]][piecey[r]-1]==1 || (piecey[r]-1)<0){break;}
+		if(board[piecex[r]][piecey[r]-1]==1 || (piecey[r]-1)<0){return;}
 	}
 	
-	if(r==4){
-	
-		for(r=0;r<4;r++){piecey[r]--;}
-	}
+	for(r=0;r<4;r++){piecey[r]--;}
 }
 
 void main(){
@@ -374,6 +388,9 @@ void main(){
 	BuildStack();
 	InitialQueue();
 	SpawnPiece();
+	PrintActive();
+	PrintStack();
+	refresh();
 	
 	while(!death){
 		
