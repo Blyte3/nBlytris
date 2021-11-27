@@ -3,42 +3,41 @@
 
 //piece order is ijlostz   ex:spawnlocx[0] holds the x coordinates for i piece spawn
 //the coordinates are x,y coordinates starting from the axis and then from up to down, left to right, except i and o, which also end with another axis point
+
+int board[10][25];
+int piecex[4],piecey[4];
 const int spawnlocx[7][4]={{4,3,6,5},{4,3,3,5},{4,5,3,5},{4,5,4,5},{4,4,5,3},{4,4,3,5},{4,3,4,5}};
 const int spawnlocy[7][4]={{19,19,19,19},{19,20,19,19},{19,20,19,19},{20,19,19,20},{19,20,20,19},{19,20,19,19},{19,20,20,19}};
+int activepiece;
+int queue[14];
+int queueaccesspoint;
+int bag[7];
+int randpieces[7];
+int randomnumber;
+int death=0;
+int tempx[4],tempy[4];
+int direction;
+int rotdir;
+int rotnum;
+int lastrot;
+int kickxdir;
+int tempkickx[5],tempkicky[5];
 const int kickx[5]={0,1, 1,0,1};
 const int kicky[5]={0,0,-1,2,2};
 const int kickydir[4]={1,-1,1,-1};
+int eaxis;
+int idirx,idiry;
 const int ikickx[5]={0,-2,1,-2,1};
 const int ikickx2[5]={0,-1,2,-1,2};
 const int ikicky[5]={0,0,0,-1,2};
 const int ikicky2[5]={0,0,0,-2,1};
-int board[10][25];
-int death=0;
-int queue[14];
-int queueaccesspoint;
-int activepiece;
-int bag[7];
-int randpieces[7];
-int randomnumber;
-int piecex[4],piecey[4];
-int tempx[4],tempy[4];
-int kickxdir;
-int eaxis;
-int lastrot;
-int rotnum;
-int tempkickx,tempkicky;
-int tempkickix[5], tempkickiy[5];
-int idirx,idiry;
 int holdpiece=-1;
-char input;
 int clearlines[4];
 int ycleared[4];
-int direction;
-int rotdir;
+char input;
 
 #include"graphics.h"
 
-//builds the matrix, fills it with zeroes
 void BuildStack(){
 	
 	int r,rt;
@@ -115,7 +114,6 @@ void MoveQueue(){
 	activepiece=queue[queueaccesspoint];
 }
 
-//creates an initial queue
 void InitialQueue(){
 
 	int r;
@@ -133,7 +131,6 @@ void InitialQueue(){
 	activepiece=queue[queueaccesspoint];
 }
 
-//spawns in the next piece in the queue
 void SpawnPiece(){
 
 	int r;
@@ -149,7 +146,7 @@ void SpawnPiece(){
 	lastrot=0;
 }
 
-//moves the piece side to side
+//moves piece side to side
 void MovePiece(){
 	
 	int r;
@@ -211,14 +208,13 @@ void RotatePiece(){
 			default:
 				for(r=0;r<4;r++){tempy[r]-=rotdir;}
 		}		
-		
+			
 		//generates a full kick table before rotating
 		if(lastrot==0 || rotnum==2){idirx=1;}		
 		else{idirx=-1;}
 		
 		if(lastrot==3 || rotnum==1){idiry=1;}
 		else{idiry=-1;}
-		
 		
 		if(
 			(lastrot==1 && rotnum==0) ||
@@ -229,102 +225,74 @@ void RotatePiece(){
 		
 			for(r=0;r<5;r++){
 			
-				tempkickix[r]=ikickx[r]*idirx;
-				tempkickiy[r]=ikicky[r]*idiry;
+				tempkickx[r]=ikickx[r]*idirx;
+				tempkicky[r]=ikicky[r]*idiry;
 			}
 		}
 		else{
 		
 			for(r=0;r<5;r++){
 			
-				tempkickix[r]=ikickx2[r]*idirx;
-				tempkickiy[r]=ikicky2[r]*idiry;
-			}
-		}
-		
-		//main rotation loop, rotates, checks if legal, moves forward in kick table, repeat
-		for(r=0;r<5;r++){
-			
-			for(rt=0;rt<4;rt++){
-			
-				if(
-					9<(tempx[rt]+tempkickix[r]) ||
-					0>(tempx[rt]+tempkickix[r]) || 
-					(24<(tempy[rt]+tempkickiy[r]) ||
-					0>(tempy[rt]+tempkickiy[r])) ||
-					(board[tempx[rt]+tempkickix[r]][tempy[rt]+tempkickiy[r]]==1))
-				{break;}
-			}
-			
-			if(rt==4){
-		
-				for(rt=0;rt<4;rt++){
-				
-					piecex[rt]=tempx[rt]+tempkickix[r];
-					piecey[rt]=tempy[rt]+tempkickiy[r];
-				}
-				
-				lastrot=rotnum;
-				
-				return;
+				tempkickx[r]=ikickx2[r]*idirx;
+				tempkicky[r]=ikicky2[r]*idiry;
 			}
 		}
 	}
-	//--------------------------------------------------------------------------------------------------
-	//rotation for all other pieces
 	else{
-		
+	
 		if(rotnum==1 || lastrot==3){kickxdir=-1;}
 		else{kickxdir=1;}
-	
+			
 		tempx[0]=piecex[0];
 		tempy[0]=piecey[0];
-		
+			
 		for(r=1;r<4;r++){
-		
+			
 			tempx[r]=(piecey[0]-piecey[r])*rotdir+piecex[0];
 			tempy[r]=(piecex[0]-piecex[r])*rotdir*(-1)+piecey[0];
 		}
-		
+			
 		for(r=0;r<5;r++){
 				
-			tempkickx=kickx[r]*kickxdir;
-			tempkicky=kicky[r]*kickydir[rotnum];
-			
-			for(rt=0;rt<4;rt++){
-			
-				if(
-				9<(tempx[rt]+tempkickx) || 
-				0>(tempx[rt]+tempkickx) || 
-				24<(tempy[rt]+tempkicky) || 
-				0>(tempy[rt])+tempkicky || 
-				(board[tempx[rt]+tempkickx][tempy[rt]+tempkicky]==1))
-				{
-				
-					break;
-				}
-			}
-			
-			if(rt==4){
-				
-				for(rt=0;rt<4;rt++){
-				
-					piecex[rt]=tempx[rt]+tempkickx;
-					piecey[rt]=tempy[rt]+tempkicky;
-				}
-				
-				lastrot=rotnum;
-				
-				return;
-			}
+			tempkickx[r]=kickx[r]*kickxdir;
+			tempkicky[r]=kicky[r]*kickydir[rotnum];
 		}
 	}
+		
+	//main rotation loop, rotates, checks if legal, moves forward in kick table, repeat
+	for(r=0;r<5;r++){
+		
+		for(rt=0;rt<4;rt++){
+		
+			if(
+				9<(tempx[rt]+tempkickx[r]) ||
+				0>(tempx[rt]+tempkickx[r]) || 
+				(24<(tempy[rt]+tempkicky[r]) ||
+				0>(tempy[rt]+tempkicky[r])) ||
+				(board[tempx[rt]+tempkickx[r]][tempy[rt]+tempkicky[r]]==1))
+			{break;}
+		}
+		
+		if(rt==4){
+	
+			for(rt=0;rt<4;rt++){
+			
+				piecex[rt]=tempx[rt]+tempkickx[r];
+				piecey[rt]=tempy[rt]+tempkicky[r];
+			}
+			
+			lastrot=rotnum;
+			
+			return;
+		}
+	}
+	
 	rotnum=lastrot;
 }
 
-//holds the piece
 void HoldPiece(){
 
+	//special case for if hold is done for the first time
 	if(holdpiece==-1){
 	
 		holdpiece=activepiece;
@@ -340,7 +308,6 @@ void HoldPiece(){
 	}
 }
 
-//drops the piece down
 void HardDrop(){
 
 	int r,rt;
@@ -367,7 +334,6 @@ void HardDrop(){
 	}
 }
 
-//moves the piece downwards
 void SoftDrop(){
 
 	int r;
