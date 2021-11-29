@@ -48,7 +48,6 @@ void BuildStack(){
     }
 }
 
-//generates a randomized bag and puts it in bag[]
 void GenBag(){
 
 	int r;
@@ -63,7 +62,6 @@ void GenBag(){
 	}
 }
 
-//checks for line clears and clears if neccesary
 void LineClear(){
 		
 	int r,rt,rth;
@@ -94,7 +92,6 @@ void LineClear(){
 	}
 }
 
-//moves the queue forward and generates more queue if needed
 void MoveQueue(){
 
 	int r;
@@ -146,7 +143,6 @@ void SpawnPiece(){
 	lastrot=0;
 }
 
-//moves piece side to side
 void MovePiece(){
 	
 	int r;
@@ -161,7 +157,6 @@ void MovePiece(){
 	for(r=0;r<4;r++){piecex[r]=piecex[r]+direction;}
 }
 
-//rotates the piece with SRS
 void RotatePiece(){
 
 	int r,rt;
@@ -173,7 +168,6 @@ void RotatePiece(){
 	
 	if(activepiece==0 || activepiece==3){
 		
-		//special rotation for i and o pieces
 		if(rotdir==-1){eaxis=3;}
 		else{eaxis=0;}
 		
@@ -209,7 +203,6 @@ void RotatePiece(){
 				for(r=0;r<4;r++){tempy[r]-=rotdir;}
 		}		
 			
-		//generates a full kick table before rotating
 		if(lastrot==0 || rotnum==2){idirx=1;}		
 		else{idirx=-1;}
 		
@@ -259,7 +252,6 @@ void RotatePiece(){
 		}
 	}
 		
-	//main rotation loop, rotates, checks if legal, moves forward in kick table, repeat
 	for(r=0;r<5;r++){
 		
 		for(rt=0;rt<4;rt++){
@@ -292,7 +284,6 @@ void RotatePiece(){
 
 void HoldPiece(){
 
-	//special case for if hold is done for the first time
 	if(holdpiece==-1){
 	
 		holdpiece=activepiece;
@@ -322,7 +313,6 @@ void HardDrop(){
 				
 					board[piecex[rt]][piecey[rt]-r+1]=1;
 					
-					//makes a list of y values to check for line clears on
 					clearlines[rt]=piecey[rt]-r+1;
 				}
 				LineClear();
@@ -348,7 +338,6 @@ void SoftDrop(){
 
 void main(){
 
-	//set rng seed, initialize ncurses, initialize board and queue
 	srand(time(0));
 	initscr();		
 	BuildStack();
