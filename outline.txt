@@ -4,14 +4,35 @@ Libraries used
 	ncurses (subject to change) just so you can see what's happening
 	
 Compilation
-	Compilation is done with tcc, or tiny c compiler. Compilation with gcc is also possible. Other compilers not tested
+	Compilation is done with tcc, or tiny c compiler. Compilation with gcc is also possible. Other compilers not tested, but probably work
 	Just be sure to link the ncurses library with -lncurses
 
 graphics.h
 	Blytris core is meant to be seperate from graphics drawing, so that it is easy to make a new gui
 	This is just a header for a few functions that print out board, queue, and hold
-	You can just write your own gui however, graphics.h should be pretty easy to swap out for some other way of printing the board
-	I'm not going to go into detail about it, since it's wackily and quickly written, and will eventally be deprecated for something that looks better
+	It's sloppily written, and so not as clear as the game logic. Note that it might eventually be deprecated for another library that looks better and handles input
+	
+	Functions
+		
+		ChangeColor
+			changes the color ncurses will print in when given the piece number+1 as an argument (ijlostz, i is 1 after adding). 0 will print out cyan on black
+		
+		PrintStack
+			It's easiest to explain by looking at it yourself, as it's a mess at the moment
+			will print out the pieces by accessing the big variable declared at the beginning of graphics.h, and also by looking at the y value of the printed stack
+			
+		PrintActive
+			writes the active piece to board[][] so it can be read by PrintStack
+			
+		RemoveActive
+			removes the active piece from board[][] right after board is printed so it does not mess with the logic
+			
+		InitGraphics
+			inits ncurses
+			inits colors
+			inits color white as orange
+			inits all the color pairs
+			does an initial print of the board so that the screen is not blank until first input
 
 Functions
 
@@ -99,7 +120,7 @@ Functions
 	HardDrop
 		Places the current piece down
 			Runs a check to see if theres a block or the ground r units underneath the current piece
-			If there is something there, then change the board at the piece coordinates minus r to blocks, then run LineClear, then MoveQueue, then SpawnPiece
+			If there is something there, then change the board at the piece coordinates minus r to the number of the current piece, then run LineClear, then MoveQueue, then SpawnPiece
 			If nothing is there, then increment r and check again
 	
 	SoftDrop
@@ -116,5 +137,6 @@ Functions
 		Main loop runs while player is still alive, dictated by variable death
 			Accept input
 			Certain inputs call certain functions
-			Before some functions are called, a variable may be set, such as the direction a piece rotates, or moves		
+			Before some functions are called, a variable may be set, such as the direction a piece rotates, or moves
+			runs print functions		
 	
