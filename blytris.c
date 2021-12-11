@@ -70,7 +70,7 @@ void LineClear(){
 	
 		for(rt=0;rt<10;rt++){
 		
-			if(board[rt][clearlines[r]]!=1){break;}
+			if(board[rt][clearlines[r]]==0){break;}
 		}
 		
 		if(rt==10){
@@ -134,7 +134,7 @@ void SpawnPiece(){
 
 	for(r=0;r<4;r++){
 		
-		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]==1){death++;}
+		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]!=0){death++;}
 		
 		piecex[r]=spawnlocx[activepiece][r];
 		piecey[r]=spawnlocy[activepiece][r];
@@ -151,7 +151,7 @@ void MovePiece(){
 	
 		if(piecex[r]+direction==-1 || piecex[r]+direction==10){return;}
 		
-		if(board[piecex[r]+direction][piecey[r]]==1){return;}
+		if(board[piecex[r]+direction][piecey[r]]!=0){return;}
 	}
 		
 	for(r=0;r<4;r++){piecex[r]=piecex[r]+direction;}
@@ -261,7 +261,7 @@ void RotatePiece(){
 				0>(tempx[rt]+tempkickx[r]) || 
 				(24<(tempy[rt]+tempkicky[r]) ||
 				0>(tempy[rt]+tempkicky[r])) ||
-				(board[tempx[rt]+tempkickx[r]][tempy[rt]+tempkicky[r]]==1))
+				(board[tempx[rt]+tempkickx[r]][tempy[rt]+tempkicky[r]]!=0))
 			{break;}
 		}
 		
@@ -307,11 +307,11 @@ void HardDrop(){
 	
 		for(rt=0;rt<4;rt++){
 			
-			if(piecey[rt]-r==-1 || board[piecex[rt]][piecey[rt]-r]==1){
+			if(piecey[rt]-r==-1 || board[piecex[rt]][piecey[rt]-r]!=0){
 			
 				for(rt=0;rt<4;rt++){
 				
-					board[piecex[rt]][piecey[rt]-r+1]=1;
+					board[piecex[rt]][piecey[rt]-r+1]=activepiece+1;
 					
 					clearlines[rt]=piecey[rt]-r+1;
 				}
@@ -330,7 +330,7 @@ void SoftDrop(){
 
 	for(r=0;r<4;r++){
 	
-		if(board[piecex[r]][piecey[r]-1]==1 || (piecey[r]-1)<0){return;}
+		if(board[piecex[r]][piecey[r]-1]!=0 || (piecey[r]-1)<0){return;}
 	}
 	
 	for(r=0;r<4;r++){piecey[r]--;}
@@ -338,14 +338,11 @@ void SoftDrop(){
 
 void main(){
 
-	srand(time(0));
-	initscr();		
+	srand(time(0));	
 	BuildStack();
 	InitialQueue();
 	SpawnPiece();
-	PrintActive();
-	PrintStack();
-	refresh();
+	InitGraphics();
 	
 	while(!death){
 		
@@ -354,37 +351,38 @@ void main(){
 			
 		input=getchar();
 		
-		if(input==','){SoftDrop();}
+		switch(input){
 		
-		if(input=='d'){
-		
-			rotdir=-1;
-			RotatePiece();
+			case ',':
+				SoftDrop();
+				break;
+			case 'd':
+				rotdir=-1;
+				RotatePiece();
+				break;
+			case 's':
+				rotdir=1;
+				RotatePiece();
+				break;
+			case 'f':
+				HoldPiece();
+				break;
+			case 'm':
+				direction=-1;
+				MovePiece();
+				break;
+			case '.':
+				direction=1;
+				MovePiece();
+				break;
+			case ' ':
+				HardDrop();
+				break;
+			case 'q':
+				death++;
+				break;
+			default: break;
 		}
-		
-		if(input=='s'){
-		
-			rotdir=1;
-			RotatePiece();
-		}
-		
-		if(input=='f'){HoldPiece();}
-		
-		if(input=='m'){
-		
-			direction=(-1);
-			MovePiece();
-		}
-		
-		if(input=='.'){
-		
-			direction=1;
-			MovePiece();
-		}
-		
-		if(input==' '){HardDrop();}
-		
-		if(input=='q'){death++; }
 		
 		PrintActive();
 		PrintStack();
