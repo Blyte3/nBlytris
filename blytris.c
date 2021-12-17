@@ -385,7 +385,7 @@ void main(){
 		}
 		
 		PrintActive();
-		PrintStack();
+		PrintBoard();
 		refresh();
 	}
 	printw("\nGame Over\n");
