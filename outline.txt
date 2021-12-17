@@ -17,12 +17,21 @@ graphics.h
 		ChangeColor
 			changes the color ncurses will print in when given the piece number+1 as an argument (ijlostz, i is 1 after adding). 0 will print out cyan on black
 		
-		PrintStack
-			It's easiest to explain by looking at it yourself, as it's a mess at the moment
-			will print out the pieces by accessing the big variable declared at the beginning of graphics.h, and also by looking at the y value of the printed stack
+		PrintRow
+			prints out a row on the board, as given by an argument. also prints out "|" as the sides of the board
+			color of the row is given by simply using ChangeColor with the board position to be printed as an argument
+			
+		PrintPiece
+			prints out a row from the big array PieceImage, accepting which row and which piece as an argument
+			color of the row is given by ChangeColor
+			
+		PrintBoard
+			first, manually prints out the first two rows of the board including queue and hold piece. this is done with printpiece and printrow
+			then print out rows until the 5 queue pieces are printed. Some additional variables keep track of what piece to print and what row of pieceimage to use 
+			finally print the final rows with no queue
 			
 		PrintActive
-			writes the active piece to board[][] so it can be read by PrintStack
+			writes the active piece to board[][] so it can be read by PrintBoard
 			
 		RemoveActive
 			removes the active piece from board[][] right after board is printed so it does not mess with the logic
