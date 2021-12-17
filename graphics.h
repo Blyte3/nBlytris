@@ -39,83 +39,110 @@ void ChangeColor(int piece){
 	}
 }
 	 
-//maybe make a seperate i and it instead of r and rt
-void PrintStack(){
+void PrintRow(int y){
 	
+	int r;
+	
+	ChangeColor(0);
+	printw("|");
+	
+	for(r=0;r<10;r++){
+	
+		switch(board[r][y]){
+        
+        	case 0:
+        		ChangeColor(0);
+        		printw(". ");
+        		break;
+        	default:
+        		ChangeColor(board[r][y]);
+        		printw("x ");
+        		break;
+        }
+	}
+	ChangeColor(0);
+	printw("|");
+}
+
+void PrintPiece(int piece, int part){
+	
+	int r;
+	
+	//handles the hold piece before there is one
+	if(piece==-1){
+		
+   		printw("         ");
+   		return;
+	}
+	
+	ChangeColor(0);
+	printw(" ");
+
+	for(r=0;r<4;r++){
+	
+		if(PieceImage[piece][part][r]==1){
+		
+			ChangeColor(piece+1);
+			printw("X ");
+		}
+		else{
+			
+			ChangeColor(0);
+			printw("  ");
+		}	
+	}
+}
+	 
+void PrintBoard(){
+	   
 	int r,rt,rth;
 	
-	rth=1;
 	ChangeColor(0);
     printw("\n          ____________________\n");
     
-    for(r=20;r>-1;r--){
-    	
-    	//print the hold piece
-    	if((r==20 || r==19) && holdpiece>-1){
-    		
-    		printw(" ");
-    		
-    		for(rt=0;rt<4;rt++){
-    		
-    			if(PieceImage[holdpiece][3-(r%3)-1][rt]){
-    				
-    				ChangeColor(holdpiece+1);
-    				printw("X ");
-    			}
-    			else{
-    				
-    				ChangeColor(0);
-    				printw("  ");
-    			}
-    		}	
-    	}
-    	else{printw("         ");}
-    	
-    	ChangeColor(0);
-    	printw("|");
-    	
-    	//prints board
-        for(rt=0;rt<10;rt++){
-        	
-        	switch(board[rt][r]){
-        	
-        		case 0:
-        			ChangeColor(0);
-        			printw(". ");
-        			break;
-        		default:
-        			ChangeColor(board[rt][r]);
-        			printw("x ");
-        	}
-        }
-        
-        ChangeColor(0);
-        printw("| ");
-        
-        //prints the piece in the queue
-        if(r%3){
+   	PrintPiece(holdpiece,0);
+   	PrintRow(20);
+   	PrintPiece(queue[queueaccesspoint+1],0);
+   	ChangeColor(0);
+   	printw("\n");
+
+   	PrintPiece(holdpiece,1);
+   	PrintRow(19);
+   	PrintPiece(queue[queueaccesspoint+1],1);
+   	ChangeColor(0);
+   	printw("\n");
+    
+    //these make sure queue is in right place and makes sure printed queue gets spaced correctly
+   	rt=2;
+   	rth=1;
+   	
+   	for(r=18;r>6;r--){
+   		
+   		ChangeColor(0);
+   		printw("         ");
+   		PrintRow(r);
+   		
+   		if(rt%3!=2){
+   		
+   			PrintPiece(queue[queueaccesspoint+rth],rt%3);
+   		}
+   		else{rth++;}
+   		
+   		rt++;
+   		
+   		ChangeColor(0);
+   		printw("\n");
+   	}
+   	   		
+	for(;r>-1;r--){
 	
-			
-	
-			for(rt=0;rt<4;rt++){
-	
-				if(PieceImage[queue[queueaccesspoint+rth]][(3-(r%3))-1][rt]==1){
-					
-					ChangeColor(queue[queueaccesspoint+rth]+1);
-					printw("X ");
-				}
-				else{
-					
-					ChangeColor(0);
-					printw("  ");
-				}	
-			}
-		}
-		else{rth++;}
-		
 		ChangeColor(0);
-        printw("\n");
-    }
+   		printw("         ");
+   		PrintRow(r);
+   		
+   		ChangeColor(0);
+   		printw("\n");
+	}
     
     ChangeColor(0);
     printw("          --------------------");
@@ -140,17 +167,21 @@ void InitGraphics(){
 	initscr();
 	
 	start_color();
+	
+	//sets white to orange
 	init_color(COLOR_WHITE,850,850,100);
-	init_pair(7,COLOR_RED,COLOR_RED);
-	init_pair(4,COLOR_WHITE,COLOR_WHITE);
-	init_pair(3,COLOR_YELLOW,COLOR_YELLOW);
-	init_pair(5,COLOR_GREEN,COLOR_GREEN);
-	init_pair(2,COLOR_BLUE,COLOR_BLUE);
+	
+	//ijlostz, then border
 	init_pair(1,COLOR_CYAN,COLOR_CYAN);
+	init_pair(2,COLOR_BLUE,COLOR_BLUE);
+	init_pair(3,COLOR_YELLOW,COLOR_YELLOW);
+	init_pair(4,COLOR_WHITE,COLOR_WHITE);
+	init_pair(5,COLOR_GREEN,COLOR_GREEN);
 	init_pair(6,COLOR_MAGENTA,COLOR_MAGENTA);
+	init_pair(7,COLOR_RED,COLOR_RED);
 	init_pair(8,COLOR_CYAN,COLOR_BLACK);
 	
 	PrintActive();
-	PrintStack();
+	PrintBoard();
 	refresh();
 }
