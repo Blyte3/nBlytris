@@ -345,10 +345,7 @@ void main(){
 	InitGraphics();
 	
 	while(!death){
-		
-		clear();
-		RemoveActive();
-			
+					
 		input=getchar();
 		
 		switch(input){
@@ -390,10 +387,9 @@ void main(){
 			default: break;
 		}
 		
-		PrintActive();
 		PrintBoard();
-		refresh();
 	}
+	
 	printw("\nGame Over\n");
 	refresh();
 	getchar();	
