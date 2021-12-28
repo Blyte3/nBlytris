@@ -38,7 +38,21 @@ void ChangeColor(int piece){
 		default:attron(COLOR_PAIR(8)); break;
 	}
 }
-	 
+
+void PrintActive(){
+	
+	int r;
+	
+	for(r=0;r<4;r++){board[piecex[r]][piecey[r]]=activepiece+1;}
+}
+
+void RemoveActive(){
+
+	int r;
+
+	for(r=0;r<4;r++){board[piecex[r]][piecey[r]]=0;}
+}
+
 void PrintRow(int y){
 	
 	int r;
@@ -94,6 +108,9 @@ void PrintPiece(int piece, int part){
 }
 	 
 void PrintBoard(){
+	
+	clear();
+	PrintActive();
 	   
 	int r,rt,rth;
 	
@@ -146,20 +163,10 @@ void PrintBoard(){
     
     ChangeColor(0);
     printw("          --------------------");
-}
+    
+    refresh();
+    RemoveActive();
 
-void PrintActive(){
-	
-	int r;
-	
-	for(r=0;r<4;r++){board[piecex[r]][piecey[r]]=activepiece+1;}
-}
-
-void RemoveActive(){
-
-	int r;
-
-	for(r=0;r<4;r++){board[piecex[r]][piecey[r]]=0;}
 }
 
 void InitGraphics(){

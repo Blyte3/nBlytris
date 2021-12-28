@@ -381,6 +381,12 @@ void main(){
 			case 'q':
 				death++;
 				break;
+			case '4':
+				BuildStack();
+				InitialQueue();
+				holdpiece=-1;
+				SpawnPiece();
+				break;
 			default: break;
 		}
 		
