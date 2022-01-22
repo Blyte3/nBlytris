@@ -44,7 +44,7 @@ void BuildStack(){
 	
 	for (r=0;r<10;r++){
 	
-        for (rt=0;rt<25;rt++){board[r][rt]=0;}
+        for (rt=0;rt<25;rt++) board[r][rt]=0;
     }
 }
 
@@ -52,7 +52,7 @@ void GenBag(){
 
 	int r;
 
-	for(r=0;r<7;r++){randpieces[r]=r;}
+	for(r=0;r<7;r++) randpieces[r]=r;
 	
 	for(r=7;r>0;r--){
 		
@@ -70,24 +70,24 @@ void LineClear(){
 	
 		for(rt=0;rt<10;rt++){
 		
-			if(board[rt][clearlines[r]]==0){break;}
+			if(board[rt][clearlines[r]]==0) break;
 		}
 		
 		if(rt==10){
 			
 			for(rt=r+1;rt<4;rt++){
 			
-				if(clearlines[r]<clearlines[rt]){clearlines[rt]--;}
+				if(clearlines[r]<clearlines[rt]) clearlines[rt]--;
 			}
 			
-			for(rt=0;rt<10;rt++){board[rt][clearlines[r]]=0;}
+			for(rt=0;rt<10;rt++) board[rt][clearlines[r]]=0;
 			
 			for(rt=0;rt<10;rt++){
 			
-				for(rth=clearlines[r];rth<24;rth++){board[rt][rth]=board[rt][rth+1];}
+				for(rth=clearlines[r];rth<24;rth++) board[rt][rth]=board[rt][rth+1];
 			}
 			
-			for(rt=0;rt<10;rt++){board[rt][24]=0;}
+			for(rt=0;rt<10;rt++) board[rt][24]=0;
 		}
 	}
 }
@@ -100,11 +100,11 @@ void MoveQueue(){
 	
 	if (queueaccesspoint==7){
 	
-		for (r=0;r<7;r++){queue[r]=queue[r+7];}
+		for (r=0;r<7;r++) queue[r]=queue[r+7];
 		
 		GenBag();
 		
-		for(r=0;r<7;r++){queue[r+7]=bag[r];}		
+		for(r=0;r<7;r++) queue[r+7]=bag[r];
 		
 		queueaccesspoint=0;
 	}	
@@ -119,11 +119,11 @@ void InitialQueue(){
 	
 	GenBag();
 	
-	for(r=0;r<7;r++){queue[r]=bag[r];}
+	for(r=0;r<7;r++) queue[r]=bag[r];
 		
 	GenBag();
 	
-	for(r=0;r<7;r++){queue[r+7]=bag[r];}
+	for(r=0;r<7;r++) queue[r+7]=bag[r];
 	
 	activepiece=queue[queueaccesspoint];
 }
@@ -134,7 +134,7 @@ void SpawnPiece(){
 
 	for(r=0;r<4;r++){
 		
-		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]!=0){death++;}
+		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]!=0) death++;
 		
 		piecex[r]=spawnlocx[activepiece][r];
 		piecey[r]=spawnlocy[activepiece][r];
@@ -149,12 +149,12 @@ void MovePiece(){
 	
 	for(r=0;r<4;r++){
 	
-		if(piecex[r]+direction==-1 || piecex[r]+direction==10){return;}
+		if(piecex[r]+direction==-1 || piecex[r]+direction==10) return;
 		
-		if(board[piecex[r]+direction][piecey[r]]!=0){return;}
+		if(board[piecex[r]+direction][piecey[r]]!=0) return;
 	}
 		
-	for(r=0;r<4;r++){piecex[r]=piecex[r]+direction;}
+	for(r=0;r<4;r++) piecex[r]=piecex[r]+direction;
 }
 
 void RotatePiece(){
@@ -163,13 +163,13 @@ void RotatePiece(){
 	
 	rotnum-=rotdir;
 	
-	if(rotnum==-1){rotnum=3;}
-	if(rotnum==4){rotnum=0;}
+	if(rotnum==-1) rotnum=3;
+	if(rotnum==4) rotnum=0;
 	
 	if(activepiece==0 || activepiece==3){
 		
-		if(rotdir==-1){eaxis=3;}
-		else{eaxis=0;}
+		if(rotdir==-1) eaxis=3;
+		else eaxis=0;
 		
 		for(r=0;r<4;r++){
 		
@@ -192,22 +192,22 @@ void RotatePiece(){
 			break;
 		
 			case 1:
-				for(r=0;r<4;r++){tempy[r]+=rotdir;}
+				for(r=0;r<4;r++) tempy[r]+=rotdir;
 			break;
 			
 			case 2:
-				for(r=0;r<4;r++){tempx[r]+=rotdir;}
+				for(r=0;r<4;r++) tempx[r]+=rotdir;
 			break;
 			
 			default:
-				for(r=0;r<4;r++){tempy[r]-=rotdir;}
+				for(r=0;r<4;r++) tempy[r]-=rotdir;
 		}		
 			
-		if(lastrot==0 || rotnum==2){idirx=1;}		
-		else{idirx=-1;}
+		if(lastrot==0 || rotnum==2) idirx=1;
+		else idirx=-1;
 		
-		if(lastrot==3 || rotnum==1){idiry=1;}
-		else{idiry=-1;}
+		if(lastrot==3 || rotnum==1) idiry=1;
+		else idiry=-1;
 		
 		if(
 			(lastrot==1 && rotnum==0) ||
@@ -233,8 +233,8 @@ void RotatePiece(){
 	}
 	else{
 	
-		if(rotnum==1 || lastrot==3){kickxdir=-1;}
-		else{kickxdir=1;}
+		if(rotnum==1 || lastrot==3) kickxdir=-1;
+		else kickxdir=1;
 			
 		tempx[0]=piecex[0];
 		tempy[0]=piecey[0];
@@ -330,10 +330,10 @@ void SoftDrop(){
 
 	for(r=0;r<4;r++){
 	
-		if(board[piecex[r]][piecey[r]-1]!=0 || (piecey[r]-1)<0){return;}
+		if(board[piecex[r]][piecey[r]-1]!=0 || (piecey[r]-1)<0) return;
 	}
 	
-	for(r=0;r<4;r++){piecey[r]--;}
+	for(r=0;r<4;r++) piecey[r]--;
 }
 
 void main(){
@@ -346,7 +346,7 @@ void main(){
 	
 	while(!death){
 					
-		input=getchar();
+		input=getch();
 		
 		switch(input){
 		
@@ -387,11 +387,11 @@ void main(){
 			default: break;
 		}
 		
-		PrintBoard();
+		PrintAll();
 	}
 	
-	printw("\nGame Over\n");
-	refresh();
-	getchar();	
+	wprintw(boardwin,"\nGame Over\n");
+	wrefresh(boardwin);
+	getch();
 	endwin();	
 }
