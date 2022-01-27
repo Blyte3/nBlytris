@@ -70,12 +70,7 @@ void InitGraphics(){
 	queuewin=newwin(18,10,1,36);
 	//box(queuewin,0,0);
 
-	PrintActive();
 	PrintAll();
-	wrefresh(holdwin);
-	wrefresh(boardwin);
-	wrefresh(queuewin);
-	RemoveActive();
 }
 
 void ChangeColor(WINDOW *window,int piece){
@@ -137,6 +132,8 @@ void PrintBoard(){
 	PrintActive();
 
 	int r;
+	
+	ChangeColor(boardwin,0);
 
 	wprintw(boardwin," ____________________\n");
 
@@ -146,6 +143,8 @@ void PrintBoard(){
 		wprintw(boardwin,"\n");
 	}
 
+	ChangeColor(boardwin,0);
+	
 	wprintw(boardwin," --------------------");
 
 	RemoveActive();

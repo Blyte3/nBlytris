@@ -12,28 +12,20 @@ int activepiece;
 int queue[14];
 int queueaccesspoint;
 int bag[7];
-int randpieces[7];
-int randomnumber;
 int death=0;
-int tempx[4],tempy[4];
 int direction;
 int rotdir;
 int rotnum;
 int lastrot;
-int kickxdir;
-int tempkickx[5],tempkicky[5];
 const int kickx[5]={0,1, 1,0,1};
 const int kicky[5]={0,0,-1,2,2};
 const int kickydir[4]={1,-1,1,-1};
-int eaxis;
-int idirx,idiry;
 const int ikickx[5]={0,-2,1,-2,1};
 const int ikickx2[5]={0,-1,2,-1,2};
 const int ikicky[5]={0,0,0,-1,2};
 const int ikicky2[5]={0,0,0,-2,1};
 int holdpiece=-1;
 int clearlines[4];
-int ycleared[4];
 char input;
 
 #include"graphics.h"
@@ -44,11 +36,17 @@ void BuildStack(){
 	
 	for (r=0;r<10;r++){
 	
-        for (rt=0;rt<25;rt++) board[r][rt]=0;
-    }
+		for (rt=0;rt<25;rt++){
+			
+			board[r][rt]=0;
+		}
+	}
 }
 
 void GenBag(){
+
+	int randpieces[7];
+	int randomnumber;
 
 	int r;
 
@@ -104,7 +102,7 @@ void MoveQueue(){
 		
 		GenBag();
 		
-		for(r=0;r<7;r++) queue[r+7]=bag[r];
+		for(r=0;r<7;r++) queue[r+7]=bag[r];		
 		
 		queueaccesspoint=0;
 	}	
@@ -134,7 +132,7 @@ void SpawnPiece(){
 
 	for(r=0;r<4;r++){
 		
-		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]!=0) death++;
+		if(board[spawnlocx[activepiece][r]][spawnlocy[activepiece][r]]) death++;
 		
 		piecex[r]=spawnlocx[activepiece][r];
 		piecey[r]=spawnlocy[activepiece][r];
@@ -159,6 +157,9 @@ void MovePiece(){
 
 void RotatePiece(){
 
+	int tempkickx[5],tempkicky[5];
+	int tempx[4],tempy[4];
+
 	int r,rt;
 	
 	rotnum-=rotdir;
@@ -167,6 +168,8 @@ void RotatePiece(){
 	if(rotnum==4) rotnum=0;
 	
 	if(activepiece==0 || activepiece==3){
+		
+		int eaxis;
 		
 		if(rotdir==-1) eaxis=3;
 		else eaxis=0;
@@ -188,7 +191,7 @@ void RotatePiece(){
 		switch(rotnum){
 			
 			case 0:
-				for(r=0;r<4;r++){tempx[r]-=rotdir;}
+				for(r=0;r<4;r++) tempx[r]-=rotdir;
 			break;
 		
 			case 1:
@@ -203,6 +206,8 @@ void RotatePiece(){
 				for(r=0;r<4;r++) tempy[r]-=rotdir;
 		}		
 			
+		int idirx,idiry;
+		
 		if(lastrot==0 || rotnum==2) idirx=1;
 		else idirx=-1;
 		
@@ -233,6 +238,8 @@ void RotatePiece(){
 	}
 	else{
 	
+		int kickxdir;
+	
 		if(rotnum==1 || lastrot==3) kickxdir=-1;
 		else kickxdir=1;
 			
@@ -257,11 +264,11 @@ void RotatePiece(){
 		for(rt=0;rt<4;rt++){
 		
 			if(
-				9<(tempx[rt]+tempkickx[r]) ||
-				0>(tempx[rt]+tempkickx[r]) || 
-				(24<(tempy[rt]+tempkicky[r]) ||
-				0>(tempy[rt]+tempkicky[r])) ||
-				(board[tempx[rt]+tempkickx[r]][tempy[rt]+tempkicky[r]]!=0))
+				tempx[rt]+tempkickx[r]>9 ||
+				tempx[rt]+tempkickx[r]<0 ||
+				tempy[rt]+tempkicky[r]>24 ||
+				tempy[rt]+tempkicky[r]<0 ||
+				board[tempx[rt]+tempkickx[r]][tempy[rt]+tempkicky[r]]!=0)
 			{break;}
 		}
 		
@@ -336,6 +343,7 @@ void SoftDrop(){
 	for(r=0;r<4;r++) piecey[r]--;
 }
 
+
 void main(){
 
 	srand(time(0));	
@@ -346,7 +354,7 @@ void main(){
 	
 	while(!death){
 					
-		input=getch();
+		input=wgetch(boardwin);
 		
 		switch(input){
 		
@@ -392,6 +400,6 @@ void main(){
 	
 	wprintw(boardwin,"\nGame Over\n");
 	wrefresh(boardwin);
-	getch();
+	wgetch(boardwin);
 	endwin();	
 }
