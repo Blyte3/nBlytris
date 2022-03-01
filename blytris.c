@@ -11,10 +11,7 @@ const int spawnlocy[7][4]={{19,19,19,19},{19,20,19,19},{19,20,19,19},{20,19,19,2
 int activepiece;
 int queue[14];
 int queueaccesspoint;
-int bag[7];
 int death=0;
-int direction;
-int rotdir;
 int rotnum;
 int lastrot;
 const int kickx[5]={0,1, 1,0,1};
@@ -43,19 +40,17 @@ void BuildStack(){
 	}
 }
 
-void GenBag(){
+void GenBag(int* array,int index){
 
-	int randpieces[7];
+	int randpieces[7]={0,1,2,3,4,5,6};
 	int randomnumber;
 
 	int r;
-
-	for(r=0;r<7;r++) randpieces[r]=r;
 	
 	for(r=7;r>0;r--){
 		
 		randomnumber=rand()%r;
-		bag[r-1]=randpieces[randomnumber];
+		array[index+r-1]=randpieces[randomnumber];
 		randpieces[randomnumber]=randpieces[r-1];
 	}
 }
@@ -100,9 +95,7 @@ void MoveQueue(){
 	
 		for (r=0;r<7;r++) queue[r]=queue[r+7];
 		
-		GenBag();
-		
-		for(r=0;r<7;r++) queue[r+7]=bag[r];		
+		GenBag(queue,7);
 		
 		queueaccesspoint=0;
 	}	
@@ -115,13 +108,9 @@ void InitialQueue(){
 
 	queueaccesspoint=0;
 	
-	GenBag();
-	
-	for(r=0;r<7;r++) queue[r]=bag[r];
+	GenBag(queue,0);
 		
-	GenBag();
-	
-	for(r=0;r<7;r++) queue[r+7]=bag[r];
+	GenBag(queue,7);
 	
 	activepiece=queue[queueaccesspoint];
 }
@@ -141,7 +130,7 @@ void SpawnPiece(){
 	lastrot=0;
 }
 
-void MovePiece(){
+void MovePiece(int direction){
 	
 	int r;
 	
@@ -155,7 +144,7 @@ void MovePiece(){
 	for(r=0;r<4;r++) piecex[r]=piecex[r]+direction;
 }
 
-void RotatePiece(){
+void RotatePiece(int rotdir){
 
 	int tempkickx[5],tempkicky[5];
 	int tempx[4],tempy[4];
@@ -322,6 +311,7 @@ void HardDrop(){
 					
 					clearlines[rt]=piecey[rt]-r+1;
 				}
+
 				LineClear();
 				MoveQueue();
 				SpawnPiece();
@@ -353,7 +343,7 @@ void main(){
 	InitGraphics();
 	
 	while(!death){
-					
+		
 		input=wgetch(boardwin);
 		
 		switch(input){
@@ -362,23 +352,19 @@ void main(){
 				SoftDrop();
 				break;
 			case 'd':
-				rotdir=-1;
-				RotatePiece();
+				RotatePiece(-1);
 				break;
 			case 's':
-				rotdir=1;
-				RotatePiece();
+				RotatePiece(1);
 				break;
 			case 'f':
 				HoldPiece();
 				break;
 			case 'm':
-				direction=-1;
-				MovePiece();
+				MovePiece(-1);
 				break;
 			case '.':
-				direction=1;
-				MovePiece();
+				MovePiece(1);
 				break;
 			case ' ':
 				HardDrop();
