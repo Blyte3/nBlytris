@@ -72,15 +72,13 @@ void LineClear(){
 			
 				if(clearlines[r]<clearlines[rt]) clearlines[rt]--;
 			}
-			
-			for(rt=0;rt<10;rt++) board[rt][clearlines[r]]=0;
-			
+						
 			for(rt=0;rt<10;rt++){
 			
 				for(rth=clearlines[r];rth<24;rth++) board[rt][rth]=board[rt][rth+1];
+				
+				board[rt][24]=0;
 			}
-			
-			for(rt=0;rt<10;rt++) board[rt][24]=0;
 		}
 	}
 }
