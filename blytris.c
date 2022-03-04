@@ -230,10 +230,7 @@ void RotatePiece(int rotdir){
 		if(rotnum==1 || lastrot==3) kickxdir=-1;
 		else kickxdir=1;
 			
-		tempx[0]=piecex[0];
-		tempy[0]=piecey[0];
-			
-		for(r=1;r<4;r++){
+		for(r=0;r<4;r++){
 			
 			tempx[r]=(piecey[0]-piecey[r])*rotdir+piecex[0];
 			tempy[r]=(piecex[0]-piecex[r])*rotdir*(-1)+piecey[0];
