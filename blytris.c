@@ -163,16 +163,8 @@ void RotatePiece(int rotdir){
 		
 		for(r=0;r<4;r++){
 		
-			if(eaxis==r){
-			
-				tempx[r]=piecex[eaxis];
-				tempy[r]=piecey[eaxis];
-			}
-			else{
-			
-				tempx[r]=(piecey[eaxis]-piecey[r])*rotdir+piecex[eaxis];
-				tempy[r]=(piecex[eaxis]-piecex[r])*rotdir*(-1)+piecey[eaxis];
-			}
+			tempx[r]=(piecey[eaxis]-piecey[r])*rotdir+piecex[eaxis];
+			tempy[r]=(piecex[eaxis]-piecex[r])*rotdir*(-1)+piecey[eaxis];
 		}
 		
 		switch(rotnum){
